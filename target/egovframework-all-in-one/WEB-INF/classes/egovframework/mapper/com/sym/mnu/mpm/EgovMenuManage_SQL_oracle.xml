@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuManageDAO">
+
+	<select id="selectMenuManageList_D" parameterType="comDefaultVO" resultType="egovMap">
+		
+		       SELECT * FROM ( SELECT rownum rn, TB.* FROM (
+					SELECT 
+						  MENU_NO           AS "menuNo"
+						, MENU_ORDR         AS "menuOrdr"
+						, MENU_NM           AS "menuNm"
+						, UPPER_MENU_NO     AS "upperMenuId"
+						, MENU_DC           AS "menuDc"
+						, RELATE_IMAGE_PATH AS "relateImagePath"
+						, RELATE_IMAGE_NM   AS "relateImageNm"
+						, PROGRM_FILE_NM    AS "progrmFileNm"
+					FROM COMTNMENUINFO 
+					WHERE MENU_NM like '%'|| #{searchKeyword}||'%'
+		       ) TB )  WHERE rn BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage}
+		 
+	</select> 
+
+	<!-- 총건수 조회 -->
+	<select id="selectMenuManageListTotCnt_S" parameterType="comDefaultVO" resultType="int">
+		
+		SELECT COUNT(MENU_NO) AS "totcnt"
+		  FROM COMTNMENUINFO
+		 WHERE MENU_NM like '%'||#{searchKeyword}||'%'
+		
+	</select>
+
+
+	<select id="selectMenuManage_D" parameterType="comDefaultVO" resultType="egovframework.com.sym.mnu.mpm.service.MenuManageVO">
+		
+			SELECT 
+				  MENU_NO           AS "menuNo"
+				, MENU_ORDR         AS "menuOrdr"
+				, MENU_NM           AS "menuNm"
+				, UPPER_MENU_NO     AS "upperMenuId"
+				, MENU_DC           AS "menuDc"
+				, RELATE_IMAGE_PATH AS "relateImagePath"
+				, RELATE_IMAGE_NM   AS "relateImageNm"
+				, PROGRM_FILE_NM    AS "progrmFileNm"
+			FROM COMTNMENUINFO
+			WHERE MENU_NO = #{searchKeyword}
+		
+	</select>
+	
+	<insert id="insertMenuManage_S">
+		
+			INSERT INTO COMTNMENUINFO 
+				( MENU_NO
+            , MENU_ORDR
+            , MENU_NM
+            , UPPER_MENU_NO
+            , MENU_DC
+            , RELATE_IMAGE_PATH
+            , RELATE_IMAGE_NM
+            , PROGRM_FILE_NM )
+			VALUES (   #{menuNo}
+                  , #{menuOrdr}
+                  , #{menuNm}  
+                  , #{upperMenuId}
+                  , #{menuDc}
+                  , #{relateImagePath}
+                  , #{relateImageNm}
+                  , #{progrmFileNm} )
+		
+	</insert>
+
+	<update id="updateMenuManage_S">
+		
+			UPDATE COMTNMENUINFO 
+			SET  MENU_ORDR         = #{menuOrdr}       
+            , MENU_NM           = #{menuNm}         
+            , UPPER_MENU_NO     = #{upperMenuId}    
+            , MENU_DC           = #{menuDc}         
+            , RELATE_IMAGE_PATH = #{relateImagePath}
+            , RELATE_IMAGE_NM   = #{relateImageNm}  
+            , PROGRM_FILE_NM    = #{progrmFileNm}   
+			WHERE MENU_NO=#{menuNo}
+		
+	</update>
+
+	<delete id="deleteMenuManage_S">
+		                          
+			DELETE FROM COMTNMENUINFO              
+			WHERE MENU_NO=#{menuNo}                 
+		                                
+	</delete> 
+	
+	<!-- 메뉴번호 존재여부 조회 -->
+	<select id="selectMenuNoByPk" parameterType="egovframework.com.sym.mnu.mpm.service.MenuManageVO" resultType="int">
+		
+		SELECT COUNT(MENU_NO) AS "totcnt"
+		  FROM COMTNMENUINFO
+		 WHERE MENU_NO = #{menuNo}
+		
+	</select>
+	
+	<!-- 상위 메뉴번호 존재여부 조회 -->
+	<select id="selectUpperMenuNoByPk" parameterType="egovframework.com.sym.mnu.mpm.service.MenuManageVO" resultType="int">
+		
+		SELECT COUNT(MENU_NO) AS totcnt
+		  FROM COMTNMENUINFO
+		 WHERE UPPER_MENU_NO = #{menuNo}
+		
+	</select>
+
+	<select id="selectMenuListT_D" parameterType="comDefaultVO" resultType="egovMap">
+		 
+            SELECT
+			      MENU_NO           AS "menuNo"
+				, MENU_ORDR         AS "menuOrdr"
+				, MENU_NM           AS "menuNm"
+				, UPPER_MENU_NO     AS "upperMenuId"
+				, MENU_DC           AS "menuDc"
+				, RELATE_IMAGE_PATH AS "relateImagePath"
+				, RELATE_IMAGE_NM   AS "relateImageNm"
+				, PROGRM_FILE_NM    AS "progrmFileNm"
+			FROM COMTNMENUINFO 
+			WHERE Menu_NO > 0 
+			ORDER BY MENU_ORDR
+		 
+	</select>
+
+	<delete id="deleteAllMenuList">
+		                          
+			DELETE FROM COMTNMENUINFO              
+		                                
+	</delete> 
+
+	<!-- 메뉴정보 총건수 조회 -->
+	<select id="selectMenuListTotCnt" parameterType="egovframework.com.sym.mnu.mpm.service.MenuManageVO" resultType="int">
+		
+		SELECT COUNT(MENU_NO) AS totcnt
+		  FROM COMTNMENUINFO
+		
+	</select>
+	
+	<!-- LEFT 메뉴 조회 -->
+	<select id="selectLeftMenuList" parameterType="hashMap" resultType="egovMap">
+		
+		SELECT * FROM (
+		
+			<if test="userId != null and userId != ''">
+			SELECT
+				TO_CHAR(A.MENU_NO)           		AS "menuNo"
+				, SUBSTR(A.MENU_NO, 0, 2)           AS "gid"
+				, A.MENU_ORDR         				AS "menuOrder"
+				, A.MENU_NM           				AS "menuNm"
+				, TO_CHAR(A.UPPER_MENU_NO)     		AS "upperMenuId"
+				, A.MENU_DC           				AS "menuDc"
+				, A.RELATE_IMAGE_PATH 				AS "relateImagePath"
+				, A.RELATE_IMAGE_NM   				AS "relateImageNm"
+				, A.PROGRM_FILE_NM    				AS "progrmFileNm"
+				, F.URL 							AS "listUrl"
+			FROM 
+				COMTNMENUINFO A /*메뉴정보*/
+			INNER JOIN 
+				COMTNMENUCREATDTLS B /*메뉴생성내역*/
+				ON A.MENU_NO = B.MENU_NO
+			INNER JOIN 
+				COMTNEMPLYRSCRTYESTBS C /*사용자보안설정*/
+				ON B.AUTHOR_CODE = C.AUTHOR_CODE
+			INNER JOIN 
+				COMTNGNRLMBER D /*일반회원*/
+				ON C.SCRTY_DTRMN_TRGET_ID = D.ESNTL_ID
+			INNER JOIN 
+				COMTNPROGRMLIST F /*프로그램목록*/ 
+				ON A.PROGRM_FILE_NM = F.PROGRM_FILE_NM
+			WHERE 
+				A.MENU_NO > 0 
+				AND D.MBER_ID = #{userId}
+				
+			UNION ALL
+			</if>
+	        
+	        SELECT 
+				'BBSMSTR_000000000000'           	AS "menuNo"
+				, '90'           					AS "gid"
+				, 1									AS "menuOrder"
+				, '사용자 생성 게시판'						AS "menuNm"
+				, '0'								AS "upperMenuId"
+				, '사용자 생성 게시판'						AS "menuDc"
+				, '/'								AS "relateImagePath"
+				, '/'								AS "relateImageNm"
+				, 'BBSMSTR_000000000000'			AS "progrmFileNm"
+				, 'dir'								AS "listUrl"
+			FROM DUAL
+			
+			UNION ALL
+					
+			SELECT 
+				A.BBS_ID	AS "menuNo"
+				, '90'
+				, ROW_NUMBER() OVER(ORDER BY A.BBS_ID)
+				, A.BBS_NM
+				, '9999999'
+				, A.BBS_NM
+				, '/'
+				, '/'
+				, A.BBS_ID
+				, '/cop/bbs/selectArticleList.do?bbsId='||A.BBS_ID
+			FROM COMTNBBSMASTER A
+			INNER JOIN COMTCCMMNDETAILCODE B
+			ON A.BBS_TY_CODE = B.CODE
+			AND B.CODE_ID = 'COM101' 
+			AND B.USE_AT='Y'
+			WHERE 1=1
+		)
+		ORDER BY "menuNo"
+		 
+	</select> 
+
+</mapper>

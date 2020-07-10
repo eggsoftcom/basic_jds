@@ -1,0 +1,99 @@
+ALTER TABLE COMTNMENUINFO ADD (PROGRM_FILE_PATH VARCHAR2(100));
+ALTER TABLE COMTNMENUINFO ADD (PROGRM_FILE_PATH_FULL VARCHAR2(100));
+
+
+
+MERGE INTO COMTNMENUINFO A
+    USING (
+            SELECT FILE_FULL, FILE_PATH, FILE_NAME, REPLACE(FILE_NAME,'.do','') as FILE_NAME2 FROM (
+                SELECT '/sym/mnu/mpm/EgovMainMenuHome.do' AS FILE_FULL, '/sym/mnu/mpm/' AS FILE_PATH, 'EgovMainMenuHome.do' AS FILE_NAME FROM DUAL UNION ALL
+                SELECT '/uat/uia/egovLoginUsr.do', '/uat/uia/', 'egovLoginUsr.do' FROM DUAL UNION ALL
+                SELECT '/sec/ram/EgovAuthorList.do', '/sec/ram/', 'EgovAuthorList.do' FROM DUAL UNION ALL
+                SELECT '/sec/rgm/EgovAuthorGroupList.do', '/sec/rgm/', 'EgovAuthorGroupList.do' FROM DUAL UNION ALL
+                SELECT '/sec/gmt/EgovGroupList.do', '/sec/gmt/', 'EgovGroupList.do' FROM DUAL UNION ALL
+                SELECT '/sec/rmt/EgovRoleList.do', '/sec/rmt/', 'EgovRoleList.do' FROM DUAL UNION ALL
+                SELECT '/sec/drm/EgovDeptAuthorList.do', '/sec/drm/', 'EgovDeptAuthorList.do' FROM DUAL UNION ALL
+                SELECT '/sts/bst/selectBbsStats.do', '/sts/bst/', 'selectBbsStats.do' FROM DUAL UNION ALL
+                SELECT '/sts/ust/selectUserStats.do', '/sts/ust/', 'selectUserStats.do' FROM DUAL UNION ALL
+                SELECT '/sts/cst/selectConectStats.do', '/sts/cst/', 'selectConectStats.do' FROM DUAL UNION ALL
+                SELECT '/sts/sst/selectScrinStats.do', '/sts/sst/', 'selectScrinStats.do' FROM DUAL UNION ALL
+                SELECT '/sts/rst/selectReprtStatsListView.do', '/sts/rst/', 'selectReprtStatsListView.do' FROM DUAL UNION ALL
+                SELECT '/sts/dst/selectDtaUseStatsListView.do', '/sts/dst/', 'selectDtaUseStatsListView.do' FROM DUAL UNION ALL
+                SELECT '/cop/bbs/selectBlogList.do', '/cop/bbs/', 'selectBlogList.do' FROM DUAL UNION ALL
+                SELECT '/cop/bbs/selectBBSMasterInfs.do', '/cop/bbs/', 'selectBBSMasterInfs.do' FROM DUAL UNION ALL
+                SELECT '/cop/tpl/selectTemplateInfs.do', '/cop/tpl/', 'selectTemplateInfs.do' FROM DUAL UNION ALL
+                SELECT '/cop/sms/selectSmsList.do', '/cop/sms/', 'selectSmsList.do' FROM DUAL UNION ALL
+                SELECT '/cop/ems/insertSndngMailView.do', '/cop/ems/', 'insertSndngMailView.do' FROM DUAL UNION ALL
+                SELECT '/cop/ems/selectSndngMailList.do', '/cop/ems/', 'selectSndngMailList.do' FROM DUAL UNION ALL
+                SELECT '/uss/umt/EgovEntrprsMberManage.do', '/uss/umt/', 'EgovEntrprsMberManage.do' FROM DUAL UNION ALL
+                SELECT '/uss/umt/EgovUserManage.do', '/uss/umt/', 'EgovUserManage.do' FROM DUAL UNION ALL
+                SELECT '/uss/umt/dpt/selectDeptManageListView.do', '/uss/umt/dpt/', 'selectDeptManageListView.do' FROM DUAL UNION ALL
+                SELECT '/uss/umt/EgovMberManage.do', '/uss/umt/', 'EgovMberManage.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/ecc/selectEventCmpgnList.do', '/uss/ion/ecc/', 'selectEventCmpgnList.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/ecc/selectTnextrlHrList.do', '/uss/ion/ecc/', 'selectTnextrlHrList.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/pwm/listPopup.do', '/uss/ion/pwm/', 'listPopup.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/noi/selectNotificationList.do', '/uss/ion/noi/', 'selectNotificationList.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/lsi/selectLoginScrinImageList.do', '/uss/ion/lsi/', 'selectLoginScrinImageList.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/msi/selectMainImageList.do', '/uss/ion/msi/', 'selectMainImageList.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/msi/getMainImageResult.do', '/uss/ion/msi/', 'getMainImageResult.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/wik/bmk/listWikiBookmark.do', '/uss/ion/wik/bmk/', 'listWikiBookmark.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/rsn/listRssTagService.do', '/uss/ion/rsn/', 'listRssTagService.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/fbk/facebook.do', '/uss/ion/fbk/', 'facebook.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/ntm/registEgovNoteManage.do', '/uss/ion/ntm/', 'registEgovNoteManage.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/ntr/listNoteRecptn.do', '/uss/ion/ntr/', 'listNoteRecptn.do' FROM DUAL UNION ALL
+                SELECT '/uss/ion/nts/listNoteTrnsmit.do', '/uss/ion/nts/', 'listNoteTrnsmit.do' FROM DUAL UNION ALL
+                SELECT '/uss/cmt/EgovCmtManageList.do', '/uss/cmt/', 'EgovCmtManageList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/ccc/SelectCcmCmmnClCodeList.do', '/sym/ccm/ccc/', 'SelectCcmCmmnClCodeList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/cde/SelectCcmCmmnDetailCodeList.do', '/sym/ccm/cde/', 'SelectCcmCmmnDetailCodeList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/cca/SelectCcmCmmnCodeList.do', '/sym/ccm/cca/', 'SelectCcmCmmnCodeList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/zip/EgovCcmZipList.do', '/sym/ccm/zip/', 'EgovCcmZipList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/adc/EgovCcmAdministCodeList.do', '/sym/ccm/adc/', 'EgovCcmAdministCodeList.do' FROM DUAL UNION ALL
+                SELECT '/sym/ccm/icr/getInsttCodeRecptnList.do', '/sym/ccm/icr/', 'getInsttCodeRecptnList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/lgm/SelectSysLogList.do', '/sym/log/lgm/', 'SelectSysLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/ulg/SelectUserLogList.do', '/sym/log/ulg/', 'SelectUserLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/tlg/SelectTrsmrcvLogList.do', '/sym/log/tlg/', 'SelectTrsmrcvLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/slg/SelectSysHistoryList.do', '/sym/log/slg/', 'SelectSysHistoryList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/wlg/SelectWebLogList.do', '/sym/log/wlg/', 'SelectWebLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/clg/SelectLoginLogList.do', '/sym/log/clg/', 'SelectLoginLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/log/plg/SelectPrivacyLogList.do', '/sym/log/plg/', 'SelectPrivacyLogList.do' FROM DUAL UNION ALL
+                SELECT '/sym/mnu/mpm/EgovMenuListSelect.do', '/sym/mnu/mpm/', 'EgovMenuListSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/mnu/mpm/EgovMenuManageSelect.do', '/sym/mnu/mpm/', 'EgovMenuManageSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/mnu/mcm/EgovMenuCreatManageSelect.do', '/sym/mnu/mcm/', 'EgovMenuCreatManageSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/mnu/bmm/selectBkmkMenuManageList.do', '/sym/mnu/bmm/', 'selectBkmkMenuManageList.do' FROM DUAL UNION ALL
+                SELECT '/sym/prm/EgovProgramListManageSelect.do', '/sym/prm/', 'EgovProgramListManageSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/prm/EgovProgramChangeRequstSelect.do', '/sym/prm/', 'EgovProgramChangeRequstSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/prm/EgovProgramChangeRequstProcessListSelect.do', '/sym/prm/', 'EgovProgramChangeRequstProcessListSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/prm/EgovProgramChgHstListSelect.do', '/sym/prm/', 'EgovProgramChgHstListSelect.do' FROM DUAL UNION ALL
+                SELECT '/sym/bat/getBatchOpertList.do', '/sym/bat/', 'getBatchOpertList.do' FROM DUAL UNION ALL
+                SELECT '/sym/bat/getBatchResultList.do', '/sym/bat/', 'getBatchResultList.do' FROM DUAL UNION ALL
+                SELECT '/sym/bat/getBatchSchdulList.do', '/sym/bat/', 'getBatchSchdulList.do' FROM DUAL UNION ALL
+                SELECT '/sym/sym/bak/getBackupOpertList.do', '/sym/sym/bak/', 'getBackupOpertList.do' FROM DUAL UNION ALL
+                SELECT '/sym/sym/bak/getBackupResultList.do', '/sym/sym/bak/', 'getBackupResultList.do' FROM DUAL UNION ALL
+                SELECT '/sym/sym/nwk/selectNtwrkList.do', '/sym/sym/nwk/', 'selectNtwrkList.do' FROM DUAL UNION ALL
+                SELECT '/sym/sym/srv/selectServerEqpmnList.do', '/sym/sym/srv/', 'selectServerEqpmnList.do' FROM DUAL UNION ALL
+                SELECT '/sym/sym/srv/selectServerList.do', '/sym/sym/srv/', 'selectServerList.do' FROM DUAL UNION ALL
+                SELECT '/sym/tbm/tbr/selectTroblReqstList.do', '/sym/tbm/tbr/', 'selectTroblReqstList.do' FROM DUAL UNION ALL
+                SELECT '/sym/tbm/tbp/selectTroblProcessList.do', '/sym/tbm/tbp/', 'selectTroblProcessList.do' FROM DUAL UNION ALL
+                SELECT '/sym/cal/EgovRestdeList.do', '/sym/cal/', 'EgovRestdeList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/trm/getTrsmrcvMntrngList.do', '/utl/sys/trm/', 'getTrsmrcvMntrngList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/dbm/getDbMntrngList.do', '/utl/sys/dbm/', 'getDbMntrngList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/htm/EgovComUtlHttpMonList.do', '/utl/sys/htm/', 'EgovComUtlHttpMonList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/prm/EgovComUtlProcessMonList.do', '/utl/sys/prm/', 'sysEgovComUtlProcessMonList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/nsm/selectNtwrkSvcMntrngList.do', '/utl/sys/nsm/', 'selectNtwrkSvcMntrngList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/fsm/selectFileSysMntrngList.do', '/utl/sys/fsm/', 'selectFileSysMntrngList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/pxy/selectProxySvcList.do', '/utl/sys/pxy/', 'selectProxySvcList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/ssy/selectSynchrnServerList.do', '/utl/sys/ssy/', 'selectSynchrnServerList.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/rsc/loginSessionView.do', '/utl/sys/rsc/', 'rscinSessionView.do' FROM DUAL UNION ALL
+                SELECT '/utl/sys/srm/selectMntrngServerList.do', '/utl/sys/srm/', 'selectMntrngServerList.do' FROM DUAL UNION ALL
+                SELECT '/sym/adr/getAdressCntcInitPage.do', '/sym/adr/', 'getAdressCntcInitPage.do' FROM DUAL UNION ALL
+                SELECT '/sec/pki/EgovCryptoInfo.do', '/sec/pki/', 'EgovCryptoInfo.do' FROM DUAL UNION ALL
+                SELECT '/ext/ldapumt/dpt/selectDeptManageTreeView.do', '/ext/ldapumt/dpt/', 'selectDeptManageTreeView.do' FROM DUAL UNION ALL
+                SELECT '/ext/ldapumt/dpt/selectDeptManageOrgChartView.do', '/ext/ldapumt/dpt/', 'selectDeptManageOrgChartView.do' FROM DUAL UNION ALL
+                SELECT '/cop/msg/websocketMessengerView.do', '/cop/msg/', 'websocketMessengerView.do' FROM DUAL
+            )
+        ) B 
+        ON (A.PROGRM_FILE_NM = B.FILE_NAME2)
+    WHEN MATCHED THEN
+        UPDATE SET A.PROGRM_FILE_PATH = B.FILE_PATH, A.PROGRM_FILE_PATH_FULL = B.FILE_FULL;
+
+

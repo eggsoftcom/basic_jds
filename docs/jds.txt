@@ -1,0 +1,36 @@
+1. npm설치
+
+2. react 와 react-dom 을 설치
+    npm i react react-dom
+    
+3. 웹팩과 바벨 설치
+    npm i @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader style-loader webpack webpack-cli -D
+
+4. webpack-cli 를 설치
+    npm install webpack-cli --save
+
+5. 빌드
+    ./node_modules/.bin/webpack --watch -d
+    
+    package.json 아래
+    "scripts": {
+	    "watch": "node_modules\\.bin\\webpack --watch -d"
+	  },
+    npm run watch
+    
+6. package.json 설정
+
+7. webpack.config.js 설정 
+
+8. jsp에 추가
+    <div id="root"></div>
+    <script src="/js/react/test.bundle.js"></script>
+    
+9. Merterial UI 추가
+   npm install @material-ui/core
+
+10. SVG아이콘 추가
+    npm install @material-ui/icons
+    
+11. LAB추가
+	npm install @material-ui/lab
